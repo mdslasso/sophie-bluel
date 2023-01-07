@@ -1,145 +1,141 @@
 
+//function pour creer les elements du dom 
 function createElement(element) {
     return document.createElement(element)
 }
 
+
+//function pour selectionner les elements  du dom
 function selectElement(element) {
     return document.querySelector(element)
 }
 
-const galerie = selectElement('.gallery')
 
+
+// Creation des elements du dom
+const galerie = selectElement('.gallery')
 const portfolio = selectElement('#portfolio')
 const divBnt = createElement("div")
-divBnt.setAttribute("class", "btn-categorie")
-
 const btnTous = createElement("button")
-const btnObjets = createElement("button")
-const btnAppart = createElement("button")
-const btnHotels = createElement("button")
 
 
+divBnt.setAttribute("class", "btn-categorie")
 btnTous.innerText = "Tous"
-btnObjets.innerText = "Objets"
-btnAppart.innerText = "Appartements"
-btnHotels.innerText = "Hotels & restaurants"
-
-divBnt.append(btnTous, btnObjets, btnAppart, btnHotels)
-
+divBnt.append(btnTous)
 portfolio.append(divBnt, galerie)
 
 
-
-/* const optionGet = {
+// Parametrage de l'Api
+const optionGet = {
     method: "GET",
     headers: {
         Accept: "application/json",
     },
 }
- */
+
+
+// Function pour afficher les elements de facon dynamique
+function afficherElements(work) {
+
+    const figure = createElement("figure")
+    const img = createElement("img")
+    //const img = new Image()
+    const figcaption = createElement("figcaption")
+
+    img.src = work.imageUrl;
+    img.setAttribute("alt", work.title);
+    figcaption.innerHTML = work.title;
+
+    figure.append(img, figcaption)
+    galerie.appendChild(figure)
+
+}
+
+
+const urlApiCategorie = "http://localhost:5678/api/categories"
 const urlApiWorks = "http://localhost:5678/api/works"
 
 
+
 function galerieAfficherPhotos() {
-    fetch(urlApiWorks)
-        .then(function (response) {
 
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.log('Mauvaise réponse du réseau')
-            }
-        })
-        .then(function (works) {
+    function afficherWorks() {
 
-            // Function Afficher Works
-            function afficherWorks() {
+        // Requete Fetch  pour faire appelle a  Api Works
+
+        fetch(urlApiWorks, optionGet)
+
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.log('Mauvaise réponse du réseau')
+                }
+            })
+            .then(function (works) {
+
+                // Affichage des elements Works
                 for (let work of works) {
-                    const figure = createElement("figure")
-                    const img = createElement("img")
-                    //const img = new Image()
-                    const figcaption = createElement("figcaption")
 
-                    img.src = work.imageUrl;
-                    img.setAttribute("alt", work.title);
-                    figcaption.innerHTML = work.title;
-
-                    figure.append(img, figcaption)
-                    galerie.appendChild(figure)
-
-
-
+                    afficherElements(work)
 
                 }
 
-
-            }
-
-            afficherWorks()
-
-
-
-            // Function Filtre Categorie
-
-            /*             function filterWorks(category) {
-            
-                            works.filter(works => works.category.name == category).forEach(work => {
-            
-                                const figure = createElement("figure")
-                                const img = new Image()
-                                const figcaption = createElement("figcaption")
-            
-                                img.src = work.imageUrl;
-                                img.setAttribute("alt", work.title);
-                                figcaption.innerHTML = work.title;
-            
-                                figure.append(img, figcaption)
-                                galerie.appendChild(figure)
-            
-                            });;
-            
+                // Requete Fetch  pour faire appelle a Api Categorie
+                fetch(urlApiCategorie, optionGet)
+                    .then(function (response) {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            console.log('Mauvaise réponse du réseau')
                         }
-             */
+                    })
+                    .then(function (categories) {
+                        for (let categorie of categories) {
 
+                            //Creation de facon dynamique les buttons categories
+                            const btnCategorie = createElement("button")
+                            btnCategorie.innerHTML = categorie.name
+                            divBnt.append(btnCategorie)
 
-
-
-
-
-            // Filtrer les elements par Categorie
-            /* 
-                        document.querySelectorAll("button").forEach((button) => {
-            
-                            button.addEventListener("click", function (event) {
-            
-            
-            
+                            btnCategorie.addEventListener("click", function (event) {
                                 document.querySelector(".gallery").innerHTML = "";
-            
-            
-                                filterWorks(button.innerText)
-            
-                                button.classList.add("active")
-            
-            
-                                if (button.innerText == "Tous") {
-            
-                                    document.querySelector(".gallery").innerHTML = "";
-                                    afficherWorks()
-            
-                                }
-            
-            
-            
-            
-                            });
-            
-                        }); */
 
-        })
-        .catch(function (error) {
-            console.log("Il y a eu un problème avec l'opération fetch :" + error.message);
-        });
+                                // Filtrage des  works par  cotegories
+                                const worksByCategorie = works.filter((works) => {
+
+                                    return works.category.name == categorie.name
+
+                                });
+
+                                for (let work of worksByCategorie) {
+                                    afficherElements(work)
+                                }
+
+                            });
+                        }
+
+                    })
+
+
+                //Affichages de tous les works avec les button Tous
+
+                btnTous.addEventListener("click", function (event) {
+                    document.querySelector(".gallery").innerHTML = "";
+
+                    for (let work of works) {
+                        afficherElements(work)
+
+                    }
+
+                });
+
+            })
+
+    }
+
+    afficherWorks()
+
 }
 
 
