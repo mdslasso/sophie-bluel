@@ -14,9 +14,11 @@ function selectElement(element) {
 
 // Creation des elements du dom
 const galerie = selectElement('.gallery')
+const main = selectElement('main')
 const portfolio = selectElement('#portfolio')
 const divBnt = createElement("div")
 const btnTous = createElement("button")
+const login = selectElement('#login')
 
 
 divBnt.setAttribute("class", "btn-categorie")
@@ -39,6 +41,7 @@ function afficherElements(work) {
 
     const figure = createElement("figure")
     const img = createElement("img")
+    img.setAttribute("crossorigin", "anonymous")
     //const img = new Image()
     const figcaption = createElement("figcaption")
 
@@ -56,91 +59,97 @@ const urlApiCategorie = "http://localhost:5678/api/categories"
 const urlApiWorks = "http://localhost:5678/api/works"
 
 
-
 function galerieAfficherPhotos() {
 
-    function afficherWorks() {
+    // Recuperation des elements de l'Api Works
+    fetch(urlApiWorks, optionGet)
 
-        // Requete Fetch  pour faire appelle a  Api Works
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.log('Mauvaise réponse du réseau')
+            }
+        })
+        .then(function (works) {
 
-        fetch(urlApiWorks, optionGet)
+            // Affichage des elements Works
+            for (let work of works) {
 
-            .then(function (response) {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    console.log('Mauvaise réponse du réseau')
-                }
-            })
-            .then(function (works) {
+                afficherElements(work)
 
-                // Affichage des elements Works
+            }
+
+            // Recuperation des elements de l'Api Categorie
+            fetch(urlApiCategorie, optionGet)
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        console.log('Mauvaise réponse du réseau')
+                    }
+                })
+                .then(function (categories) {
+                    for (let categorie of categories) {
+
+                        //Creation de facon dynamique les buttons categories
+                        const btnCategorie = createElement("button")
+                        btnCategorie.innerHTML = categorie.name
+                        divBnt.append(btnCategorie)
+
+                        btnCategorie.addEventListener("click", function (event) {
+                            galerie.innerHTML = "";
+
+                            // Filtrage des  works par  cotegories
+                            const worksByCategorie = works.filter((works) => {
+
+                                return works.category.name == categorie.name
+
+                            });
+
+                            for (let work of worksByCategorie) {
+                                afficherElements(work)
+                            }
+
+                        });
+                    }
+
+                })
+
+
+            //Affichage works avec le button Tous
+            btnTous.addEventListener("click", function (event) {
+                galerie.innerHTML = "";
+
                 for (let work of works) {
-
                     afficherElements(work)
 
                 }
 
-                // Requete Fetch  pour faire appelle a Api Categorie
-                fetch(urlApiCategorie, optionGet)
-                    .then(function (response) {
-                        if (response.ok) {
-                            return response.json();
-                        } else {
-                            console.log('Mauvaise réponse du réseau')
-                        }
-                    })
-                    .then(function (categories) {
-                        for (let categorie of categories) {
+            });
 
-                            //Creation de facon dynamique les buttons categories
-                            const btnCategorie = createElement("button")
-                            btnCategorie.innerHTML = categorie.name
-                            divBnt.append(btnCategorie)
-
-                            btnCategorie.addEventListener("click", function (event) {
-                                document.querySelector(".gallery").innerHTML = "";
-
-                                // Filtrage des  works par  cotegories
-                                const worksByCategorie = works.filter((works) => {
-
-                                    return works.category.name == categorie.name
-
-                                });
-
-                                for (let work of worksByCategorie) {
-                                    afficherElements(work)
-                                }
-
-                            });
-                        }
-
-                    })
+        })
 
 
-                //Affichages de tous les works avec les button Tous
 
-                btnTous.addEventListener("click", function (event) {
-                    document.querySelector(".gallery").innerHTML = "";
 
-                    for (let work of works) {
-                        afficherElements(work)
-
-                    }
-
-                });
-
-            })
-
-    }
-
-    afficherWorks()
 
 }
 
 
-
 galerieAfficherPhotos()
+
+login.addEventListener("click", function (event) {
+    login.setAttribute("class", "active-login")
+
+    main.innerHTML = ""
+    const sectionLogin = createElement("div")
+    sectionLogin.setAttribute("class", "section-login")
+    main.appendChild(sectionLogin)
+
+
+
+});
 
 
 
