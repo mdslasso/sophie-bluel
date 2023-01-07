@@ -30,18 +30,18 @@ portfolio.append(divBnt, galerie)
 
 
 
-const optionGet = {
+/* const optionGet = {
     method: "GET",
     headers: {
         Accept: "application/json",
     },
 }
-
+ */
 const urlApiWorks = "http://localhost:5678/api/works"
-const urlApiCategorie = "http://localhost:5678/api/categories"
+
 
 function galerieAfficherPhotos() {
-    fetch(urlApiWorks, optionGet)
+    fetch(urlApiWorks)
         .then(function (response) {
 
             if (response.ok) {
@@ -69,32 +69,37 @@ function galerieAfficherPhotos() {
 
 
 
+
                 }
+
+
             }
 
             afficherWorks()
 
+
+
             // Function Filtre Categorie
 
-            function filterWorks(category) {
-
-                works.filter(works => works.category.name == category).forEach(work => {
-
-                    const figure = createElement("figure")
-                    const img = new Image()
-                    const figcaption = createElement("figcaption")
-
-                    img.src = work.imageUrl;
-                    img.setAttribute("alt", work.title);
-                    figcaption.innerHTML = work.title;
-
-                    figure.append(img, figcaption)
-                    galerie.appendChild(figure)
-
-                });;
-
-            }
-
+            /*             function filterWorks(category) {
+            
+                            works.filter(works => works.category.name == category).forEach(work => {
+            
+                                const figure = createElement("figure")
+                                const img = new Image()
+                                const figcaption = createElement("figcaption")
+            
+                                img.src = work.imageUrl;
+                                img.setAttribute("alt", work.title);
+                                figcaption.innerHTML = work.title;
+            
+                                figure.append(img, figcaption)
+                                galerie.appendChild(figure)
+            
+                            });;
+            
+                        }
+             */
 
 
 
@@ -102,34 +107,34 @@ function galerieAfficherPhotos() {
 
 
             // Filtrer les elements par Categorie
-
-            document.querySelectorAll("button").forEach((button) => {
-
-                button.addEventListener("click", function (event) {
-
-
-
-                    document.querySelector(".gallery").innerHTML = "";
-
-
-                    filterWorks(button.innerText)
-
-                    button.classList.add("active")
-
-
-                    if (button.innerText == "Tous") {
-
-                        document.querySelector(".gallery").innerHTML = "";
-                        afficherWorks()
-
-                    }
-
-
-
-
-                });
-
-            });
+            /* 
+                        document.querySelectorAll("button").forEach((button) => {
+            
+                            button.addEventListener("click", function (event) {
+            
+            
+            
+                                document.querySelector(".gallery").innerHTML = "";
+            
+            
+                                filterWorks(button.innerText)
+            
+                                button.classList.add("active")
+            
+            
+                                if (button.innerText == "Tous") {
+            
+                                    document.querySelector(".gallery").innerHTML = "";
+                                    afficherWorks()
+            
+                                }
+            
+            
+            
+            
+                            });
+            
+                        }); */
 
         })
         .catch(function (error) {
