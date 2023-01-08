@@ -13,12 +13,14 @@ function selectElement(element) {
 
 
 // Creation des elements du dom
-const galerie = selectElement('.gallery')
-const main = selectElement('main')
-const portfolio = selectElement('#portfolio')
+const body = selectElement("body")
+const introduction = selectElement(".introduction")
+const galerie = selectElement(".gallery")
+const main = selectElement("main")
+const portfolio = selectElement("#portfolio")
 const divBnt = createElement("div")
 const btnTous = createElement("button")
-const login = selectElement('#login')
+const login = selectElement("#login")
 
 
 divBnt.setAttribute("class", "btn-categorie")
@@ -100,6 +102,9 @@ function galerieAfficherPhotos() {
                         btnCategorie.addEventListener("click", function (event) {
                             galerie.innerHTML = "";
 
+                            event.currentTarget.setAttribute("class", "button-active")
+
+
                             // Filtrage des  works par  cotegories
                             const worksByCategorie = works.filter((works) => {
 
@@ -139,13 +144,18 @@ function galerieAfficherPhotos() {
 
 galerieAfficherPhotos()
 
+
 login.addEventListener("click", function (event) {
     login.setAttribute("class", "active-login")
-
     main.innerHTML = ""
     const sectionLogin = createElement("div")
     sectionLogin.setAttribute("class", "section-login")
     main.appendChild(sectionLogin)
+
+});
+
+
+body.addEventListener("click", function (event) {
 
 
 
