@@ -10,6 +10,13 @@ function selectElement(element) {
     return document.querySelector(element)
 }
 
+// function pour ajouter plusieur attribute a un element
+function setAttributes(el, attrs) {
+    for (var key in attrs) {
+        el.setAttribute(key, attrs[key]);
+    }
+}
+
 
 
 // Creation des elements du dom
@@ -27,15 +34,6 @@ divBnt.setAttribute("class", "btn-categorie")
 btnTous.innerText = "Tous"
 divBnt.append(btnTous)
 portfolio.append(divBnt, galerie)
-
-
-// Parametrage de l'Api
-const optionGet = {
-    method: "GET",
-    headers: {
-        Accept: "application/json",
-    },
-}
 
 
 // Function pour afficher les elements de facon dynamique
@@ -64,7 +62,7 @@ const urlApiWorks = "http://localhost:5678/api/works"
 function galerieAfficherPhotos() {
 
     // Recuperation des elements de l'Api Works
-    fetch(urlApiWorks, optionGet)
+    fetch(urlApiWorks)
 
         .then(function (response) {
             if (response.ok) {
@@ -82,8 +80,9 @@ function galerieAfficherPhotos() {
 
             }
 
+
             // Recuperation des elements de l'Api Categorie
-            fetch(urlApiCategorie, optionGet)
+            fetch(urlApiCategorie)
                 .then(function (response) {
                     if (response.ok) {
                         return response.json();
@@ -134,22 +133,45 @@ function galerieAfficherPhotos() {
             });
 
         })
-
-
-
-
-
 }
 
 
 galerieAfficherPhotos()
 
 
+
+// Section Login
+
 login.addEventListener("click", function (event) {
+    event.preventDefault();
     login.setAttribute("class", "active-login")
     main.innerHTML = ""
-    const sectionLogin = createElement("div")
+
+    const sectionLogin = createElement("section")
+    const loginText = createElement("h2")
+    const labelEmail = createElement("label")
+    const labelPassword = createElement("label")
+    const loginForm = createElement("form")
+    const inputEmail = createElement("input")
+    const inputPassword = createElement("input")
+    const submitLogin = createElement("input")
+    const motDePasseOublier = createElement("a")
+
+    setAttributes(labelEmail, { "for": "email" });
+    setAttributes(labelPassword, { "for": "password" });
+    setAttributes(inputEmail, { "type": "email", "name": "email", "id": "email" });
+    setAttributes(inputPassword, { "type": "password", "name": "password", "id": "password" });
+    setAttributes(submitLogin, { "type": "submit", "value": "Se connecter" });
+    setAttributes(motDePasseOublier, { "href": "#" });
+
+    labelEmail.innerText = "Email"
+    labelPassword.innerText = "Password"
+    motDePasseOublier.innerText = "Mot de passe oublié"
+    loginText.innerText = "Login"
+
     sectionLogin.setAttribute("class", "section-login")
+    loginForm.append(labelEmail, inputEmail, labelPassword, inputPassword, submitLogin)
+    sectionLogin.append(loginText, loginForm, motDePasseOublier)
     main.appendChild(sectionLogin)
 
 });

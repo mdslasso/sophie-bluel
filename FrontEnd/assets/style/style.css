@@ -363,11 +363,46 @@ button {
 
 }
 
-.section-login {
 
-	height: 400px;
-	background-color: red;
+
+
+.section-login {
+	width: 50%;
+	margin: auto;
+	text-align: center;
+
 }
+
+.section-login>* {
+	text-align: center;
+
+}
+
+.section-login h2 {
+	margin-bottom: 20px;
+}
+
+.section-login a {
+	color: black;
+}
+
+
+.section-login form {
+	text-align: left;
+	margin-top: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+}
+
+.section-login input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
 
 .active-login {
 	font-family: 'Work Sans';
