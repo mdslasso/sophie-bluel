@@ -1,4 +1,5 @@
 
+
 //function pour creer les elements du dom 
 function createElement(element) {
     return document.createElement(element)
@@ -11,9 +12,9 @@ function selectElement(element) {
 }
 
 // function pour ajouter plusieur attribute a un element
-function setAttributes(el, attrs) {
+function setAttributes(element, attrs) {
     for (var key in attrs) {
-        el.setAttribute(key, attrs[key]);
+        element.setAttribute(key, attrs[key]);
     }
 }
 
@@ -21,7 +22,6 @@ function setAttributes(el, attrs) {
 
 // Creation des elements du dom
 const body = selectElement("body")
-const introduction = selectElement(".introduction")
 const galerie = selectElement(".gallery")
 const main = selectElement("main")
 const portfolio = selectElement("#portfolio")
@@ -41,7 +41,6 @@ function afficherElements(work) {
 
     const figure = createElement("figure")
     const img = createElement("img")
-    img.setAttribute("crossorigin", "anonymous")
     //const img = new Image()
     const figcaption = createElement("figcaption")
 
@@ -51,6 +50,8 @@ function afficherElements(work) {
 
     figure.append(img, figcaption)
     galerie.appendChild(figure)
+
+
 
 }
 
@@ -143,7 +144,6 @@ galerieAfficherPhotos()
 // Section Login
 
 login.addEventListener("click", function (event) {
-    event.preventDefault();
     login.setAttribute("class", "active-login")
     main.innerHTML = ""
 
@@ -158,9 +158,9 @@ login.addEventListener("click", function (event) {
     const motDePasseOublier = createElement("a")
 
     setAttributes(labelEmail, { "for": "email" });
-    setAttributes(labelPassword, { "for": "password" });
-    setAttributes(inputEmail, { "type": "email", "name": "email", "id": "email" });
-    setAttributes(inputPassword, { "type": "password", "name": "password", "id": "password" });
+    setAttributes(labelPassword, { "for": "password", });
+    setAttributes(inputEmail, { "type": "email", "name": "email", "id": "email", "required": "" });
+    setAttributes(inputPassword, { "type": "password", "name": "password", "id": "password", "required": "" });
     setAttributes(submitLogin, { "type": "submit", "value": "Se connecter" });
     setAttributes(motDePasseOublier, { "href": "#" });
 
@@ -174,14 +174,54 @@ login.addEventListener("click", function (event) {
     sectionLogin.append(loginText, loginForm, motDePasseOublier)
     main.appendChild(sectionLogin)
 
+
+    loginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const valid = true;
+        const form = event.currentTarget
+        const data = new FormData(form)
+        const email = data.get("email")
+        const password = data.get("password")
+
+        for (let input of document.querySelector("form input")) {
+            valid = valid && input.reportValidity()
+            if (!valid) {
+                break
+
+            } else {
+
+                console.log("ok")
+
+
+            }
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+    });
+
+
+
+
 });
 
 
-body.addEventListener("click", function (event) {
 
 
 
-});
+
+
+//body.addEventListener("click", function (event) {});
 
 
 

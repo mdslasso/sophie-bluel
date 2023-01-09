@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const cors = require('cors')
 require('dotenv').config();
 const helmet = require('helmet');
 const swaggerUi = require('swagger-ui-express')
@@ -12,7 +11,9 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({
+    policy: "cross-origin"
+}));
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
 const db = require("./models");

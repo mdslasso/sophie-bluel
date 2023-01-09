@@ -4,81 +4,8 @@ location than your website. ⚠️If you set this header, any website can embed 
 
 Solution :
 
-- npm install cors
+app.use(helmet()); 
 
-Server.js
-- const cors = require('cors');
-- app.use(cors());
-
-
-
-
-
-const reponseCategories = await fetch('http://localhost:5678/api/works');
-categories = await reponseCategories.json();
-
-for (let categorie of categories) {
-    //Creation de facon dynamique les buttons categories
-    const btnCategorie = createElement("button")
-    btnCategorie.innerHTML = categorie.name
-    divBnt.append(btnCategorie)
-
-    btnCategorie.addEventListener("click", function (event) {
-        galerie.innerHTML = "";
-
-        event.currentTarget.setAttribute("class", "button-active")
-
-
-        // Filtrage des  works par  cotegories
-        const worksByCategorie = works.filter((works) => {
-
-            return works.category.name == categorie.name
-
-        });
-
-        for (let work of worksByCategorie) {
-            afficherElements(work)
-        }
-
-    });
-}
-
-}
-
-
-//Affichage works avec le button Tous
-btnTous.addEventListener("click", function (event) {
-    galerie.innerHTML = "";
-
-    for (let work of works) {
-        afficherElements(work)
-
-    }
-
-});
-
-        })
-
-
-
-
-
-}
-
-
-galerieAfficherPhotos()
-
-
-login.addEventListener("click", function (event) {
-    login.setAttribute("class", "active-login")
-    main.innerHTML = ""
-    const sectionLogin = createElement("div")
-    sectionLogin.setAttribute("class", "section-login")
-    main.appendChild(sectionLogin)
-
-});
-
-
-body.addEventListener("click", function (event) {
-
-
+app.use(helmet.crossOriginResourcePolicy({
+    policy: "cross-origin"
+}));
