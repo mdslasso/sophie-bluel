@@ -1,5 +1,4 @@
 
-
 //function pour creer les elements du dom 
 function createElement(element) {
     return document.createElement(element)
@@ -24,10 +23,30 @@ function setAttributes(element, attrs) {
 const body = selectElement("body")
 const galerie = selectElement(".gallery")
 const main = selectElement("main")
+const introduction = selectElement("#introduction")
 const portfolio = selectElement("#portfolio")
 const divBnt = createElement("div")
 const btnTous = createElement("button")
+
+
+//Creation des elements du Formulaire login
 const login = selectElement("#login")
+const sectionLogin = createElement("section")
+const loginText = createElement("h2")
+const labelEmail = createElement("label")
+const labelPassword = createElement("label")
+const loginForm = createElement("form")
+const inputEmail = createElement("input")
+const inputPassword = createElement("input")
+const submitLogin = createElement("input")
+const motDePasseOublier = createElement("a")
+
+
+//Creation des elements admin header
+const header = selectElement("header")
+const sectionAdmin = createElement("div")
+
+
 
 
 divBnt.setAttribute("class", "btn-categorie")
@@ -58,6 +77,7 @@ function afficherElements(work) {
 
 const urlApiCategorie = "http://localhost:5678/api/categories"
 const urlApiWorks = "http://localhost:5678/api/works"
+const urlApiLogin = "http://localhost:5678/api/users/login"
 
 
 function galerieAfficherPhotos() {
@@ -105,7 +125,7 @@ function galerieAfficherPhotos() {
                             event.currentTarget.setAttribute("class", "button-active")
 
 
-                            // Filtrage des  works par  cotegories
+                            // Filtrage des works par categories
                             const worksByCategorie = works.filter((works) => {
 
                                 return works.category.name == categorie.name
@@ -122,7 +142,8 @@ function galerieAfficherPhotos() {
                 })
 
 
-            //Affichage works avec le button Tous
+
+            //Affichage tous les works avec le button "Tous"
             btnTous.addEventListener("click", function (event) {
                 galerie.innerHTML = "";
 
@@ -141,21 +162,12 @@ galerieAfficherPhotos()
 
 
 
+
 // Section Login
 
-login.addEventListener("click", function (event) {
+login.addEventListener("click", function () {
     login.setAttribute("class", "active-login")
     main.innerHTML = ""
-
-    const sectionLogin = createElement("section")
-    const loginText = createElement("h2")
-    const labelEmail = createElement("label")
-    const labelPassword = createElement("label")
-    const loginForm = createElement("form")
-    const inputEmail = createElement("input")
-    const inputPassword = createElement("input")
-    const submitLogin = createElement("input")
-    const motDePasseOublier = createElement("a")
 
     setAttributes(labelEmail, { "for": "email" });
     setAttributes(labelPassword, { "for": "password", });
@@ -175,55 +187,70 @@ login.addEventListener("click", function (event) {
     main.appendChild(sectionLogin)
 
 
-    loginForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const valid = true;
-        const form = event.currentTarget
-        const data = new FormData(form)
-        const email = data.get("email")
-        const password = data.get("password")
-
-        for (let input of document.querySelector("form input")) {
-            valid = valid && input.reportValidity()
-            if (!valid) {
-                break
-
-            } else {
-
-                console.log("ok")
-
-
-            }
-
-
-
-
-        }
-
-
-
-
-
-
-
-
-
-    });
-
-
-
 
 });
 
 
 
 
+// Action Loggin
+loginForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const form = event.currentTarget
+    const data = new FormData(form)
+
+    const emailValue = data.get("email")
+    const passwordValue = data.get("password")
+
+
+    let user = {
+        email: emailValue,
+        password: passwordValue
+    };
+
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(user)
+    }
+
+    fetch(urlApiLogin, options)
+        .then(response => response.json())
+        .then(result => {
+
+            loginText.innerText = ""
+
+
+            if (result.message == "") {
+
+                //window.location.replace("/FrontEnd");
+                sectionAdmin.setAttribute("class", "section-admin")
+                main.innerText = ""
+
+                body.prepend(sectionAdmin)
+                main.append(introduction, portfolio)
 
 
 
-//body.addEventListener("click", function (event) {});
+
+            } else {
+
+                loginText.innerText = result.message
+                sectionAdmin.remove()
 
 
+            }
+
+
+
+        })
+
+
+
+});
 
 
 
