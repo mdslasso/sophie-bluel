@@ -6,15 +6,14 @@ const swaggerUi = require('swagger-ui-express')
 const yaml = require('yamljs')
 const swaggerDocs = yaml.load('swagger.yaml')
 const app = express()
+
 const cors = require('cors')
-
-
 app.use(cors())
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(helmet.crossOriginResourcePolicy({
-    policy: "cross-origin"
-}));
+app.use(helmet());
+//app.use(helmet.crossOriginResourcePolicy({policy: "cross-origin"}));
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
 const db = require("./models");
