@@ -545,6 +545,11 @@ button {
 
 }
 
+#cadre-image {
+	height: 200px;
+	background-color: red;
+}
+
 
 .close {
 	color: black;

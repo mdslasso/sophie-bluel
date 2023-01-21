@@ -277,6 +277,13 @@ li:hover {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
+#section-form select {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
 #section-form label {
 	margin: 2em 0 1em 0;
 }
@@ -355,6 +362,7 @@ button {
 	justify-content: center;
 	gap: 10px;
 	padding: 10px;
+	flex-wrap: wrap;
 
 }
 
@@ -381,7 +389,7 @@ button {
 	display: none;
 	position: fixed;
 	z-index: 1;
-	padding-top: 100px;
+	padding-top: 50px;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -402,13 +410,13 @@ button {
 #modal-content {
 	background-color: white;
 	width: 30%;
-	height: 600px;
 	margin: auto;
 	padding: 30px;
 	border-radius: 20px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	flex-wrap: wrap;
 
 }
 
@@ -419,6 +427,7 @@ button {
 	flex-direction: column;
 	justify-content: space-between;
 	gap: 30px;
+	flex-wrap: wrap;
 
 }
 
@@ -454,12 +463,17 @@ button {
 
 }
 
+#modal-element #section-form {
+	width: 100%;
+
+
+}
+
 
 
 #modal-section-photo {
 
 	width: 100%;
-	height: 350px;
 	overflow: auto;
 
 
@@ -527,6 +541,58 @@ button {
 
 
 }
+
+
+#cadre-image-ajout {
+
+	background-color: #E8F1F7;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 15px;
+	gap: 10px;
+	flex-wrap: wrap;
+
+}
+
+#cadre-image-ajout i {
+	font-size: 70px;
+	color: gainsboro;
+
+
+}
+
+
+
+#cadre-image-ajout input {
+	border: none;
+	box-shadow: none;
+
+
+
+}
+
+
+#submit-valider {
+
+	padding: 10px;
+}
+
+
+#submit-valider:hover {
+
+	cursor: pointer;
+}
+
+
+#ajout-form hr {
+
+	margin-top: 40px;
+}
+
+
+
+
 
 
 
