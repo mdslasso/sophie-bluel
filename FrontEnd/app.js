@@ -209,7 +209,9 @@ loginForm.addEventListener("submit", function (event) {
     const optionsLogin = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8'
+            'Content-Type': 'application/json;charset=utf-8',
+
+
         },
         body: JSON.stringify(user)
     }
@@ -224,8 +226,10 @@ loginForm.addEventListener("submit", function (event) {
 
             if (user.userId || user.token) {
 
+
                 main.innerText = ""
                 modeEdition.innerText = ""
+
 
                 icoEdit.setAttribute("class", "fa-solid fa-pen-to-square")
                 sectionAdmin.setAttribute("class", "section-admin")
@@ -331,21 +335,21 @@ loginForm.addEventListener("submit", function (event) {
 
                                     let id = work.id
 
-                                    let options = {
+                                    let optionsDelete = {
                                         method: "DELETE",
                                         headers: {
                                             "Content-type": "application/json; charsert=UTF-8",
+                                            "Authorization": `Basic ${user.token}`,
+
+
                                         }
 
                                     }
 
-                                    fetch(`http://localhost:5678/api/works/${id}`, options)
+                                    fetch(`http://localhost:5678/api/works/${id}`, optionsDelete)
 
-                                        .then((response) => response.json())
-                                        .then((json) => console.log(json))
+                                        .then(response => response.json())
 
-                                    console.log(' Delete ID : ', id)
-                                    modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
 
 
                                 })
@@ -392,9 +396,8 @@ loginForm.addEventListener("submit", function (event) {
                         setAttributes(labelTitle, { "for": "Titre" });
                         setAttributes(submitValider, { "type": "submit", "id": "submit-valider", "value": "Valider" });
                         setAttributes(labelCategory, { "for": "Catégorie", });
-                        setAttributes(image, { "type": "file", "name": "image", "id": "image", "accept": "image/*", "required": "" });
+                        setAttributes(image, { "type": "file", "enctype": "multipart/form-data", "name": "image", "id": "image", "accept": "image/*", "required": "" });
                         setAttributes(title, { "type": "text", "name": "title", "id": "title", "required": "" });
-
 
 
                         fetch(urlApiCategorie)
@@ -408,8 +411,6 @@ loginForm.addEventListener("submit", function (event) {
                                     ajoutForm.innerText = ""
                                     const optionCategory = createElement("option")
                                     setAttributes(optionCategory, { "value": categorie.id });
-
-
                                     optionCategory.innerText = categorie.name
                                     selectCategory.append(optionCategory)
                                     ajoutForm.append(cadreImageAjout, labelTitle, title, labelCategory, selectCategory, hr, submitValider)
@@ -435,32 +436,32 @@ loginForm.addEventListener("submit", function (event) {
                             const categorieValue = data.get("category")
 
 
-                            const newWork = {
+                            const addNewWork = {
                                 title: titleValue,
                                 imageUrl: imageValue,
                                 categoryId: Number(categorieValue),
                                 userId: user.userId,
+
+
                             };
 
 
-
-
-                            const optionsWorks = {
+                            let optionsAddWorks = {
                                 method: 'POST',
                                 headers: {
-                                    'Content-Type': 'application/json;charset=utf-8'
+                                    'Content-Type': 'application/json;charset=utf-8',
+                                    //'Content-Type': 'application/x-www-form-urlencoded',
+                                    "Authorization": `Basic ${user.token}`,
+
+
                                 },
-                                body: JSON.stringify(newWork)
+                                body: JSON.stringify(addNewWork)
                             }
 
 
-                            fetch(urlApiWorks, optionsWorks)
+                            fetch(urlApiWorks, optionsAddWorks)
                                 .then(response => response.json())
-                                .then((result) => console.log(result))
-
-
-
-
+                                .then(data => console.log(data))
 
 
                         })
