@@ -45,6 +45,19 @@ setAttributes(submitLogin, { "type": "submit", "value": "Se connecter" });
 setAttributes(motDePasseOublier, { "href": "#" });
 
 
+//Creation des elements admin 
+const sectionAdmin = createElement("div")
+const publierChargement = createElement("button")
+const modeEdition = createElement("button")
+const icoEdit = createElement("i")
+const editIco1 = createElement("i")
+const editIco2 = createElement("i")
+const editIco3 = createElement("i")
+
+const cadreEdit1 = createElement("div")
+const cadreEdit2 = createElement("div")
+const cadreEdit3 = createElement("div")
+
 
 
 
@@ -186,6 +199,7 @@ loginBtn.addEventListener("click", function () {
 
 // Connexion
 loginForm.addEventListener("submit", function (event) {
+
     event.preventDefault();
     const form = event.currentTarget
     const data = new FormData(form)
@@ -219,22 +233,10 @@ loginForm.addEventListener("submit", function (event) {
 
             loginText.innerText = ""
 
+
+
+
             if (user.userId || user.token) {
-
-
-                //Creation des elements admin 
-                const sectionAdmin = createElement("div")
-                const publierChargement = createElement("button")
-                const modeEdition = createElement("button")
-                const icoEdit = createElement("i")
-                const editIco1 = createElement("i")
-                const editIco2 = createElement("i")
-                const editIco3 = createElement("i")
-
-                const cadreEdit1 = createElement("div")
-                const cadreEdit2 = createElement("div")
-                const cadreEdit3 = createElement("div")
-
 
 
                 main.innerText = ""
@@ -250,13 +252,21 @@ loginForm.addEventListener("submit", function (event) {
                 modeEdition.setAttribute("class", "edition")
                 publierChargement.setAttribute("class", "publier-chargement")
 
+
+
                 modeEdition.innerText = ""
                 publierChargement.innerText = "publier les changements"
                 modeEdition.append(icoEdit, " Mode édition ")
+
                 sectionAdmin.append(modeEdition, publierChargement)
 
                 body.prepend(sectionAdmin)
+
                 main.append(introduction, portfolio)
+
+                cadreEdit1.innerText = ""
+                cadreEdit2.innerText = ""
+                cadreEdit3.innerText = ""
 
                 cadreEdit1.append(editIco1, "modifier")
                 cadreEdit1.setAttribute("class", "cadre-edit")
@@ -270,6 +280,8 @@ loginForm.addEventListener("submit", function (event) {
 
 
 
+
+
                 const figureEdit = selectElement("#introduction figure")
                 figureEdit.setAttribute("class", "figure-edit")
                 figureEdit.append(cadreEdit1)
@@ -280,8 +292,10 @@ loginForm.addEventListener("submit", function (event) {
 
 
                 const projetEdit = selectElement("#portfolio h2")
+
                 projetEdit.setAttribute("class", "projet-edit")
                 projetEdit.append(cadreEdit3)
+
 
 
 
