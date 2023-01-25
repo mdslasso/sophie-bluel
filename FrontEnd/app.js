@@ -45,11 +45,6 @@ setAttributes(submitLogin, { "type": "submit", "value": "Se connecter" });
 setAttributes(motDePasseOublier, { "href": "#" });
 
 
-//Creation des elements admin 
-const sectionAdmin = createElement("div")
-const publierChargement = createElement("button")
-const modeEdition = createElement("button")
-const icoEdit = createElement("i")
 
 
 
@@ -179,7 +174,7 @@ loginBtn.addEventListener("click", function () {
     loginForm.append(labelEmail, inputEmail, labelPassword, inputPassword, submitLogin)
     sectionLogin.append(loginText, loginForm, motDePasseOublier)
     main.appendChild(sectionLogin)
-    sectionAdmin.remove()
+    //sectionAdmin.remove()
 
 
 
@@ -227,30 +222,74 @@ loginForm.addEventListener("submit", function (event) {
             if (user.userId || user.token) {
 
 
+                //Creation des elements admin 
+                const sectionAdmin = createElement("div")
+                const publierChargement = createElement("button")
+                const modeEdition = createElement("button")
+                const icoEdit = createElement("i")
+                const editIco1 = createElement("i")
+                const editIco2 = createElement("i")
+                const editIco3 = createElement("i")
+
+                const cadreEdit1 = createElement("div")
+                const cadreEdit2 = createElement("div")
+                const cadreEdit3 = createElement("div")
+
+
+
                 main.innerText = ""
                 modeEdition.innerText = ""
 
-
                 icoEdit.setAttribute("class", "fa-solid fa-pen-to-square")
+                editIco1.setAttribute("class", "fa-solid fa-pen-to-square")
+                editIco2.setAttribute("class", "fa-solid fa-pen-to-square")
+                editIco3.setAttribute("class", "fa-solid fa-pen-to-square")
+
+
                 sectionAdmin.setAttribute("class", "section-admin")
                 modeEdition.setAttribute("class", "edition")
                 publierChargement.setAttribute("class", "publier-chargement")
 
                 modeEdition.innerText = ""
                 publierChargement.innerText = "publier les changements"
-
-                modeEdition.append(icoEdit, "Mode édition")
+                modeEdition.append(icoEdit, " Mode édition ")
                 sectionAdmin.append(modeEdition, publierChargement)
 
                 body.prepend(sectionAdmin)
                 main.append(introduction, portfolio)
 
+                cadreEdit1.append(editIco1, "modifier")
+                cadreEdit1.setAttribute("class", "cadre-edit")
+
+                cadreEdit2.append(editIco2, "modifier")
+                cadreEdit2.setAttribute("class", "cadre-edit2")
+
+
+                cadreEdit3.append(editIco3, " modifier")
+                cadreEdit3.setAttribute("class", "cadre-edit3")
+
+
+
+                const figureEdit = selectElement("#introduction figure")
+                figureEdit.setAttribute("class", "figure-edit")
+                figureEdit.append(cadreEdit1)
+
+                const articleEdit = selectElement("#introduction article")
+                articleEdit.setAttribute("class", "article-edit")
+                articleEdit.prepend(cadreEdit2)
+
+
+                const projetEdit = selectElement("#portfolio h2")
+                projetEdit.setAttribute("class", "projet-edit")
+                projetEdit.append(cadreEdit3)
+
+
+
 
 
                 // Edition Mode
-                modeEdition.addEventListener("click", function () {
-
-
+                modeEdition.addEventListener("click", function (event) {
+                    event.preventDefault()
                     const modalEntete = createElement("div")
                     const modalContent = createElement("div")
                     const modalElement = createElement("div")
@@ -266,6 +305,8 @@ loginForm.addEventListener("submit", function (event) {
                     const submitValider = createElement("input")
 
 
+
+                    ajoutForm.setAttribute("onsubmit", "return false")
                     close.innerHTML = "&times;"
                     retour.innerHTML = "&leftarrow;"
                     btnAjouter.innerText = "Ajouter une photo"
@@ -291,10 +332,10 @@ loginForm.addEventListener("submit", function (event) {
 
 
                     modal.appendChild(modalContent)
-
                     modalEntete.appendChild(close)
                     modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
                     modalContent.append(modalEntete, modalElement)
+
 
 
 
@@ -331,25 +372,39 @@ loginForm.addEventListener("submit", function (event) {
                                 // Suppression  work 
                                 deleteWork.addEventListener("click", function (event) {
                                     event.preventDefault();
-                                    modalElement.innerHTML = ""
 
-                                    let id = work.id
+
+                                    modalSectionPhoto.innerHTML = ""
 
                                     let optionsDelete = {
                                         method: "DELETE",
                                         headers: {
                                             "Content-type": "application/json; charsert=UTF-8",
-                                            "Authorization": `Basic ${user.token}`,
-
-
+                                            "Authorization": `Basic ${user.token}`
+                                            //"Authorization": "Bearer" + user.token,
                                         }
 
                                     }
 
-                                    fetch(`http://localhost:5678/api/works/${id}`, optionsDelete)
+                                    fetch(`http://localhost:5678/api/works/${work.id}`, optionsDelete)
 
-                                        .then(response => response.json())
+                                        .then(response => {
 
+                                            if (response.status == 204) {
+
+                                                titreGalerie.innerText = "Galerie photo"
+                                                modal.style.display = "block"
+                                                modalElement.innerText = ""
+                                                modalEntete.innerText = ""
+                                                modalEntete.append(close)
+                                                modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
+
+                                            } else {
+
+
+                                            }
+
+                                        })
 
 
                                 })
@@ -361,8 +416,8 @@ loginForm.addEventListener("submit", function (event) {
 
 
                     // Ajout d'un nouveau work
-                    btnAjouter.addEventListener("click", function () {
-
+                    btnAjouter.addEventListener("click", function (event) {
+                        event.preventDefault()
                         titreGalerie.innerText = "Ajout photo"
                         modalEntete.innerText = ""
                         modalEntete.append(retour, close)
@@ -396,7 +451,7 @@ loginForm.addEventListener("submit", function (event) {
                         setAttributes(labelTitle, { "for": "Titre" });
                         setAttributes(submitValider, { "type": "submit", "id": "submit-valider", "value": "Valider" });
                         setAttributes(labelCategory, { "for": "Catégorie", });
-                        setAttributes(image, { "type": "file", "enctype": "multipart/form-data", "name": "image", "id": "image", "accept": "image/*", "required": "" });
+                        setAttributes(image, { "type": "file", "name": "image", "id": "fileUpload", "accept": "image/*", "required": "" });
                         setAttributes(title, { "type": "text", "name": "title", "id": "title", "required": "" });
 
 
@@ -424,45 +479,43 @@ loginForm.addEventListener("submit", function (event) {
                         modalElement.append(titreGalerie, modalSectionForm)
 
 
+
                         // Envoie du nouveau work dans la base de donnee
                         ajoutForm.addEventListener("submit", function (event) {
                             event.preventDefault();
-
                             const form = event.currentTarget
                             const data = new FormData(form)
-
-                            const imageValue = data.get("image")
-                            const titleValue = data.get("title")
-                            const categorieValue = data.get("category")
-
-
-                            const addNewWork = {
-                                title: titleValue,
-                                imageUrl: imageValue,
-                                categoryId: Number(categorieValue),
-                                userId: user.userId,
-
-
-                            };
-
 
                             let optionsAddWorks = {
                                 method: 'POST',
                                 headers: {
-                                    'Content-Type': 'application/json;charset=utf-8',
-                                    //'Content-Type': 'application/x-www-form-urlencoded',
-                                    "Authorization": `Basic ${user.token}`,
-
-
+                                    // "Content-Type": "application/json",
+                                    "Authorization": `Bearer ${user.token}`,
                                 },
-                                body: JSON.stringify(addNewWork)
+
+                                body: data
                             }
 
 
-                            fetch(urlApiWorks, optionsAddWorks)
-                                .then(response => response.json())
-                                .then(data => console.log(data))
 
+                            fetch(urlApiWorks, optionsAddWorks)
+                                .then(response => {
+                                    if (response.status == 201) {
+
+                                        titreGalerie.innerText = "Galerie photo"
+                                        modal.style.display = "block"
+                                        modalElement.innerText = ""
+                                        modalEntete.innerText = ""
+                                        modalEntete.append(close)
+                                        modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
+
+                                    } else {
+
+                                        console.log(response.status)
+
+
+                                    }
+                                })
 
                         })
 
@@ -475,10 +528,7 @@ loginForm.addEventListener("submit", function (event) {
                         modalEntete.innerText = ""
                         modalEntete.append(close)
 
-
                     })
-
-
 
 
                     window.addEventListener("click", function (event) {
@@ -495,7 +545,7 @@ loginForm.addEventListener("submit", function (event) {
 
 
 
-                    retour.addEventListener("click", function (event) {
+                    retour.addEventListener("click", function () {
                         titreGalerie.innerText = "Galerie photo"
                         modal.style.display = "block"
                         modalElement.innerText = ""
