@@ -61,7 +61,7 @@ const btnSupprimer = createElement("span")
 const modalSectionForm = createElement("section")
 const ajoutForm = createElement("form")
 const submitValider = createElement("input")
-const image = createElement("input")
+let image = createElement("input")
 const title = createElement("input")
 const icoImage = createElement("i")
 const conditionImage = createElement("p")
@@ -71,12 +71,9 @@ const labelCategory = createElement("label")
 const selectCategory = createElement("select")
 const modal = createElement("div")
 const imgChange = new Image()
-
 const cadreUpload = createElement("div")
 const btnUpload = createElement("button")
-
 cadreUpload.setAttribute("class", "cadre-upload")
-
 
 
 setAttributes(labelEmail, { "for": "email" });
@@ -121,11 +118,222 @@ function afficherElements(works) {
     }
 }
 
+// function pour afficher la section
+function afficherLogin() {
+
+    main.innerHTML = "";
+    loginForm.innerHTML = "";
+
+
+    labelEmail.innerText = "Email"
+    labelPassword.innerText = "Password"
+    motDePasseOublier.innerText = "Mot de passe oublié"
+    loginText.innerText = "Login"
+
+    loginText.setAttribute("class", "loginText")
+
+    sectionLogin.setAttribute("id", "section-form")
+    loginForm.append(labelEmail, inputEmail, labelPassword, inputPassword, submitLogin)
+    sectionLogin.append(loginText, loginForm, motDePasseOublier)
+    main.appendChild(sectionLogin)
+
+
+
+}
+
+
+// function pour afficher les elements de la section Admin
+function afficherAdmin() {
+
+    main.innerText = ""
+    modeEdition.innerText = ""
+
+    icoEdit.setAttribute("class", "fa-solid fa-pen-to-square")
+    editIco1.setAttribute("class", "fa-solid fa-pen-to-square")
+    editIco2.setAttribute("class", "fa-solid fa-pen-to-square")
+    editIco3.setAttribute("class", "fa-solid fa-pen-to-square")
+
+    sectionAdmin.setAttribute("class", "section-admin")
+    modeEdition.setAttribute("class", "edition")
+    publierChargement.setAttribute("class", "publier-chargement")
+
+    modeEdition.innerText = ""
+    publierChargement.innerText = "publier les changements"
+    modeEdition.append(icoEdit, " Mode édition ")
+
+    sectionAdmin.append(modeEdition, publierChargement)
+
+    body.prepend(sectionAdmin)
+
+    main.append(introduction, portfolio)
+
+    cadreEdit1.innerText = ""
+    cadreEdit2.innerText = ""
+    cadreEdit3.innerText = ""
+
+    cadreEdit1.append(editIco1, "modifier")
+    cadreEdit1.setAttribute("class", "cadre-edit")
+
+    cadreEdit2.append(editIco2, "modifier")
+    cadreEdit2.setAttribute("class", "cadre-edit2")
+
+    cadreEdit3.append(editIco3, " modifier")
+    cadreEdit3.setAttribute("class", "cadre-edit3")
+
+    const figureEdit = selectElement("#introduction figure")
+    figureEdit.setAttribute("class", "figure-edit")
+    figureEdit.append(cadreEdit1)
+
+    const articleEdit = selectElement("#introduction article")
+    articleEdit.setAttribute("class", "article-edit")
+    articleEdit.prepend(cadreEdit2)
+
+    const projetEdit = selectElement("#portfolio h2")
+    projetEdit.setAttribute("class", "projet-edit")
+    projetEdit.append(cadreEdit3)
+
+}
+
+
+
+// function pour afficher les elements de la modale
+function afficherModale() {
+
+    close.innerHTML = "&times;"
+    retour.innerHTML = "&leftarrow;"
+    btnAjouter.innerText = "Ajouter une photo"
+    btnSupprimer.innerText = "Supprimer la galerie"
+
+    modal.setAttribute("class", "modal")
+    close.setAttribute("class", "close")
+    retour.setAttribute("class", "retour")
+    modalContent.setAttribute("id", "modal-content")
+    modalElement.setAttribute("id", "modal-element")
+    modalEntete.setAttribute("id", "modal-entete")
+    modalSectionPhoto.setAttribute("id", "modal-section-photo")
+    modalSectionForm.setAttribute("id", "section-form")
+    modal.setAttribute("hr", "#")
+
+    modal.style.display = "block"
+    modal.innerHTML = ""
+    modalSectionPhoto.innerHTML = ""
+    modalElement.innerHTML = ""
+    modalContent.innerHTML = ""
+    titreGalerie.innerText = "Galerie photo"
+
+    modal.appendChild(modalContent)
+    modalEntete.appendChild(close)
+    modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
+    modalContent.append(modalEntete, modalElement)
+
+}
+
+
+
+// function ajout works
+
+function
+    ajouterWorks() {
+
+    imgChange.remove()
+    image.setAttribute("id", "input-image-work")
+    titreGalerie.innerText = "Ajout photo"
+    modalEntete.innerText = ""
+    modalEntete.append(retour, close)
+    modalElement.innerHTML = ""
+    modalSectionForm.innerHTML = ""
+
+    labelTitle.innerText = "Titre"
+    labelCategory.innerText = "Catégorie"
+    conditionImage.innerText = "jpg, png : 4mo max"
+    submitValider.innerHTML = ""
+
+    ajoutForm.setAttribute("id", "ajout-form")
+    selectCategory.setAttribute("name", "category")
+    icoImage.setAttribute("class", "fa-sharp fa-solid fa-image")
+    cadreImageAjout.setAttribute("id", "cadre-image-ajout")
+
+    ajoutForm.innerHTML = ""
+
+    fetch(urlApiCategorie)
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .then(function (categories) {
+            for (let categorie of categories) {
+
+                const optionCategory = createElement("option")
+                setAttributes(optionCategory, { "value": categorie.id });
+                optionCategory.innerText = categorie.name
+                selectCategory.append(optionCategory)
+
+            }
+
+            ajoutForm.append(cadreImageAjout, labelTitle, title, labelCategory, selectCategory, hr, submitValider)
+
+
+        });
+
+
+
+    btnUpload.innerText = " + Ajouter photo"
+    conditionImage.setAttribute("class", "element-montrer")
+    image.setAttribute("class", "element-montrer")
+
+    cadreUpload.append(btnUpload, image)
+    cadreImageAjout.append(icoImage, cadreUpload, conditionImage)
+    modalSectionForm.append(ajoutForm)
+    modalElement.append(titreGalerie, modalSectionForm)
+
+    // Recuperation de l'image 
+
+    image.addEventListener("change", function (event) {
+
+        icoImage.setAttribute("class", "element-cacher")
+        conditionImage.setAttribute("class", "element-cacher")
+        image.setAttribute("class", "element-cacher")
+        btnUpload.remove()
+
+
+        imgChange.setAttribute("id", "image-upload")
+        imgChange.src = URL.createObjectURL(event.target.files[0]);
+        cadreImageAjout.append(imgChange)
+
+        submitValider.setAttribute("id", "submit-valider-change")
+
+
+
+
+
+
+
+
+
+    })
+
+}
+
+// function elements modal
+function modalElements() {
+    modal.style.display = "none"
+    modalEntete.innerHTML = ""
+    modalEntete.append(close)
+    image.value = "";
+    imgChange.remove()
+    console.log(image.value)
+
+
+}
+
+
+
+
 
 const urlApiCategorie = "http://localhost:5678/api/categories"
 const urlApiWorks = "http://localhost:5678/api/works"
 const urlApiLogin = "http://localhost:5678/api/users/login"
-
 
 
 function galerieAfficherPhotos() {
@@ -190,27 +398,15 @@ function galerieAfficherPhotos() {
 }
 
 
+
+
 galerieAfficherPhotos()
 
 
 // formulaire de connexion
 loginBtn.addEventListener("click", function () {
-    main.innerHTML = "";
-    loginForm.innerHTML = "";
 
-
-    labelEmail.innerText = "Email"
-    labelPassword.innerText = "Password"
-    motDePasseOublier.innerText = "Mot de passe oublié"
-    loginText.innerText = "Login"
-
-    loginText.setAttribute("class", "loginText")
-
-    sectionLogin.setAttribute("id", "section-form")
-    loginForm.append(labelEmail, inputEmail, labelPassword, inputPassword, submitLogin)
-    sectionLogin.append(loginText, loginForm, motDePasseOublier)
-    main.appendChild(sectionLogin)
-
+    afficherLogin()
 
 })
 
@@ -241,6 +437,9 @@ loginForm.addEventListener("submit", function (event) {
         body: JSON.stringify(user)
     }
 
+
+
+
     fetch(urlApiLogin, optionsLogin)
 
         .then(response => response.json())
@@ -251,89 +450,12 @@ loginForm.addEventListener("submit", function (event) {
 
             if (user.userId || user.token) {
 
-                main.innerText = ""
-                modeEdition.innerText = ""
-
-                icoEdit.setAttribute("class", "fa-solid fa-pen-to-square")
-                editIco1.setAttribute("class", "fa-solid fa-pen-to-square")
-                editIco2.setAttribute("class", "fa-solid fa-pen-to-square")
-                editIco3.setAttribute("class", "fa-solid fa-pen-to-square")
-
-
-                sectionAdmin.setAttribute("class", "section-admin")
-                modeEdition.setAttribute("class", "edition")
-                publierChargement.setAttribute("class", "publier-chargement")
-
-
-
-                modeEdition.innerText = ""
-                publierChargement.innerText = "publier les changements"
-                modeEdition.append(icoEdit, " Mode édition ")
-
-                sectionAdmin.append(modeEdition, publierChargement)
-
-                body.prepend(sectionAdmin)
-
-                main.append(introduction, portfolio)
-
-                cadreEdit1.innerText = ""
-                cadreEdit2.innerText = ""
-                cadreEdit3.innerText = ""
-
-                cadreEdit1.append(editIco1, "modifier")
-                cadreEdit1.setAttribute("class", "cadre-edit")
-
-                cadreEdit2.append(editIco2, "modifier")
-                cadreEdit2.setAttribute("class", "cadre-edit2")
-
-                cadreEdit3.append(editIco3, " modifier")
-                cadreEdit3.setAttribute("class", "cadre-edit3")
-
-
-                const figureEdit = selectElement("#introduction figure")
-                figureEdit.setAttribute("class", "figure-edit")
-                figureEdit.append(cadreEdit1)
-
-                const articleEdit = selectElement("#introduction article")
-                articleEdit.setAttribute("class", "article-edit")
-                articleEdit.prepend(cadreEdit2)
-
-
-                const projetEdit = selectElement("#portfolio h2")
-                projetEdit.setAttribute("class", "projet-edit")
-                projetEdit.append(cadreEdit3)
-
+                afficherAdmin()
 
                 // Edition Mode
                 modeEdition.addEventListener("click", function () {
-                    close.innerHTML = "&times;"
-                    retour.innerHTML = "&leftarrow;"
-                    btnAjouter.innerText = "Ajouter une photo"
-                    btnSupprimer.innerText = "Supprimer la galerie"
 
-                    modal.setAttribute("class", "modal")
-                    close.setAttribute("class", "close")
-                    retour.setAttribute("class", "retour")
-                    modalContent.setAttribute("id", "modal-content")
-                    modalElement.setAttribute("id", "modal-element")
-                    modalEntete.setAttribute("id", "modal-entete")
-                    modalSectionPhoto.setAttribute("id", "modal-section-photo")
-                    modalSectionForm.setAttribute("id", "section-form")
-                    modal.setAttribute("hr", "#")
-
-                    modal.style.display = "block"
-                    modal.innerHTML = ""
-                    modalSectionPhoto.innerHTML = ""
-                    modalElement.innerHTML = ""
-                    modalContent.innerHTML = ""
-                    titreGalerie.innerText = "Galerie photo"
-
-
-                    modal.appendChild(modalContent)
-                    modalEntete.appendChild(close)
-                    modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
-                    modalContent.append(modalEntete, modalElement)
-
+                    afficherModale()
 
 
                     fetch(urlApiWorks)
@@ -366,7 +488,6 @@ loginForm.addEventListener("submit", function (event) {
                                 modalSectionPhoto.append(article)
 
 
-
                                 // Suppression work 
                                 deleteWork.addEventListener("click", function (event) {
                                     event.preventDefault()
@@ -385,13 +506,9 @@ loginForm.addEventListener("submit", function (event) {
 
                                         .then(response => {
 
-                                            if (response.status == 204) {
-
-
-
+                                            if (response.status === 204) {
 
                                             }
-
 
                                         })
 
@@ -402,85 +519,12 @@ loginForm.addEventListener("submit", function (event) {
                         })
 
 
+
                     // Ajout d'un nouveau work
                     btnAjouter.addEventListener("click", function () {
 
-                        imgChange.remove()
-                        image.value = "";
 
-                        image.setAttribute("id", "input-image-work")
-
-
-                        titreGalerie.innerText = "Ajout photo"
-                        modalEntete.innerText = ""
-                        modalEntete.append(retour, close)
-                        modalElement.innerHTML = ""
-                        modalSectionForm.innerHTML = ""
-
-
-                        labelTitle.innerText = "Titre"
-                        labelCategory.innerText = "Catégorie"
-                        conditionImage.innerText = "jpg, png : 4mo max"
-                        submitValider.innerHTML = ""
-
-
-                        ajoutForm.setAttribute("id", "ajout-form")
-                        selectCategory.setAttribute("name", "category")
-                        icoImage.setAttribute("class", "fa-sharp fa-solid fa-image")
-                        cadreImageAjout.setAttribute("id", "cadre-image-ajout")
-
-
-
-                        fetch(urlApiCategorie)
-                            .then(function (response) {
-                                if (response.ok) {
-                                    return response.json();
-                                }
-                            })
-                            .then(function (categories) {
-                                for (let categorie of categories) {
-                                    ajoutForm.innerHTML = ""
-                                    const optionCategory = createElement("option")
-                                    setAttributes(optionCategory, { "value": categorie.id });
-                                    optionCategory.innerText = categorie.name
-                                    selectCategory.append(optionCategory)
-                                    ajoutForm.append(cadreImageAjout, labelTitle, title, labelCategory, selectCategory, hr, submitValider)
-
-                                }
-
-                            });
-
-
-
-                        btnUpload.innerText = " + Ajouter photo"
-
-                        conditionImage.setAttribute("class", "element-montrer")
-                        image.setAttribute("class", "element-montrer")
-
-                        cadreUpload.append(btnUpload, image)
-                        cadreImageAjout.append(icoImage, cadreUpload, conditionImage)
-                        modalSectionForm.append(ajoutForm)
-                        modalElement.append(titreGalerie, modalSectionForm)
-
-
-
-                        // Recuperation de l'image 
-                        image.addEventListener("change", function (event) {
-
-                            icoImage.setAttribute("class", "element-cacher")
-                            conditionImage.setAttribute("class", "element-cacher")
-                            image.setAttribute("class", "element-cacher")
-                            btnUpload.remove()
-
-                            imgChange.setAttribute("id", "image-upload")
-                            imgChange.src = URL.createObjectURL(event.target.files[0]);
-                            cadreImageAjout.append(imgChange)
-
-                            submitValider.setAttribute("id", "submit-valider-change")
-
-
-                        })
-
+                        ajouterWorks()
 
                         // Envoie du nouveau work dans la base de donnee
                         ajoutForm.addEventListener("submit", function (event) {
@@ -503,20 +547,13 @@ loginForm.addEventListener("submit", function (event) {
                             fetch(urlApiWorks, optionsAddWorks)
                                 .then(response => {
 
-                                    if (response.status == 201) {
+                                    if (response.status === 201) {
 
                                         //body.prepend(sectionAdmin)
 
-
                                     }
 
-
-
-
                                 })
-
-
-
                         })
 
 
@@ -526,7 +563,7 @@ loginForm.addEventListener("submit", function (event) {
                     // Gestion de la  modal
                     close.addEventListener("click", function () {
                         modalElements()
-                        image.innerHTML = ""
+
                     })
 
 
@@ -547,6 +584,8 @@ loginForm.addEventListener("submit", function (event) {
                         modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
                         imgChange.remove()
                         image.value = "";
+
+
 
 
 
@@ -575,17 +614,8 @@ loginForm.addEventListener("submit", function (event) {
 
 });
 
-// function elements modal
-function modalElements() {
-    modal.style.display = "none"
-    modalEntete.innerHTML = ""
-    modalEntete.append(close)
-    image.value = "";
-    imgChange.remove()
 
-
-}
-
+localStorage.setItem(user)
 
 
 
