@@ -368,6 +368,13 @@ button {
 
 }
 
+.btn-categorie-active {
+	background-color: #1D6154;
+	color: white;
+
+}
+
+
 
 
 .section-admin {
