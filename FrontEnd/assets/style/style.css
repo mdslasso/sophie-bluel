@@ -824,3 +824,14 @@ input[type="file"] {
 	font-size: 30px;
 	color: #1D6154
 }
+
+#edit-mode {
+	color: gray;
+	font-size: 17px;
+	margin-left: 33px;
+	display: inline-block;
+	position: absolute;
+	margin-top: 7px;
+
+
+}

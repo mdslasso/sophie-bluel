@@ -48,6 +48,13 @@ const editIco3 = createElement("i")
 const cadreEdit1 = createElement("div")
 const cadreEdit2 = createElement("div")
 const cadreEdit3 = createElement("div")
+icoEdit.setAttribute("class", "fa-solid fa-pen-to-square")
+editIco1.setAttribute("class", "fa-solid fa-pen-to-square")
+editIco2.setAttribute("class", "fa-solid fa-pen-to-square")
+editIco3.setAttribute("class", "fa-solid fa-pen-to-square")
+sectionAdmin.setAttribute("class", "section-admin")
+modeEdition.setAttribute("class", "edition")
+publierChargement.setAttribute("class", "publier-chargement")
 
 //Creation des elements de la modal
 const modalEntete = createElement("div")
@@ -87,6 +94,15 @@ setAttributes(submitValider, { "type": "submit", "id": "submit-valider", "value"
 setAttributes(labelCategory, { "for": "Catégorie", });
 setAttributes(image, { "type": "file", "name": "image", "id": "fileUpload", "accept": "image/*", "required": "" });
 setAttributes(title, { "type": "text", "name": "title", "id": "title", "required": "" });
+modal.setAttribute("class", "modal")
+close.setAttribute("class", "close")
+retour.setAttribute("class", "retour")
+modalContent.setAttribute("id", "modal-content")
+modalElement.setAttribute("id", "modal-element")
+modalEntete.setAttribute("id", "modal-entete")
+modalSectionPhoto.setAttribute("id", "modal-section-photo")
+modalSectionForm.setAttribute("id", "section-form")
+modal.setAttribute("hr", "#")
 
 // Creations des button pour la gestion des filtres par categorie
 const divBnt = createElement("div")
@@ -133,13 +149,6 @@ function afficherLogin() {
 function afficherAdmin() {
     main.innerText = ""
     modeEdition.innerText = ""
-    icoEdit.setAttribute("class", "fa-solid fa-pen-to-square")
-    editIco1.setAttribute("class", "fa-solid fa-pen-to-square")
-    editIco2.setAttribute("class", "fa-solid fa-pen-to-square")
-    editIco3.setAttribute("class", "fa-solid fa-pen-to-square")
-    sectionAdmin.setAttribute("class", "section-admin")
-    modeEdition.setAttribute("class", "edition")
-    publierChargement.setAttribute("class", "publier-chargement")
     modeEdition.innerText = ""
     publierChargement.innerText = "publier les changements"
     modeEdition.append(icoEdit, " Mode édition ")
@@ -173,15 +182,6 @@ function afficherModale() {
     retour.innerHTML = "&leftarrow;"
     btnAjouter.innerText = "Ajouter une photo"
     btnSupprimer.innerText = "Supprimer la galerie"
-    modal.setAttribute("class", "modal")
-    close.setAttribute("class", "close")
-    retour.setAttribute("class", "retour")
-    modalContent.setAttribute("id", "modal-content")
-    modalElement.setAttribute("id", "modal-element")
-    modalEntete.setAttribute("id", "modal-entete")
-    modalSectionPhoto.setAttribute("id", "modal-section-photo")
-    modalSectionForm.setAttribute("id", "section-form")
-    modal.setAttribute("hr", "#")
     modal.style.display = "block"
     modal.innerHTML = ""
     modalSectionPhoto.innerHTML = ""
@@ -322,7 +322,19 @@ function galerieAfficherPhotos() {
             btnTous.setAttribute("class", "btn-categorie-active")
             btnTous.addEventListener("click", function () {
 
-                titreProjet.innerHTML = "Mes Projets"
+                if (localStorage.getItem("userToken")) {
+
+                    titreProjet.innerHTML = `Mes Projets  <div id= "edit-mode" > <i class="fa-solid fa-pen-to-square"></i>modifier<div>`;
+
+
+
+                    icoEdit
+
+
+                } else {
+
+                    titreProjet.innerHTML = "Mes Projets";
+                }
 
 
                 btnTous.setAttribute("class", "btn-categorie-active")
