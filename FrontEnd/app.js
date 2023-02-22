@@ -23,6 +23,8 @@ const main = selectElement("main")
 const introduction = selectElement("#introduction")
 const portfolio = selectElement("#portfolio")
 const loginBtn = selectElement("#login")
+const titreProjet = selectElement("#titre-projet")
+
 
 // Creation des elements du formulaire login
 const loginForm = createElement("form")
@@ -111,7 +113,7 @@ function afficherElements(works) {
     }
 }
 
-// function pour afficher la section
+// function pour afficher la section login
 function afficherLogin() {
     main.innerHTML = "";
     loginForm.innerHTML = "";
@@ -127,7 +129,7 @@ function afficherLogin() {
 }
 
 
-// function pour afficher les elements de la section Admin
+//function pour afficher les elements de la section Admin
 function afficherAdmin() {
     main.innerText = ""
     modeEdition.innerText = ""
@@ -151,7 +153,7 @@ function afficherAdmin() {
     cadreEdit1.setAttribute("class", "cadre-edit")
     cadreEdit2.append(editIco2, "modifier")
     cadreEdit2.setAttribute("class", "cadre-edit2")
-    cadreEdit3.append(editIco3, " modifier")
+    cadreEdit3.append(editIco3, "modifier")
     cadreEdit3.setAttribute("class", "cadre-edit3")
     const figureEdit = selectElement("#introduction figure")
     figureEdit.setAttribute("class", "figure-edit")
@@ -163,7 +165,6 @@ function afficherAdmin() {
     projetEdit.setAttribute("class", "projet-edit")
     projetEdit.append(cadreEdit3)
 }
-
 
 
 // function pour afficher les elements de la modale
@@ -194,7 +195,7 @@ function afficherModale() {
 }
 
 
-// function elements modal
+// function elements modal ( action click close, body )
 function modalElements() {
     modal.style.display = "none"
     modalEntete.innerHTML = ""
@@ -251,7 +252,7 @@ function formAjouterWorks() {
     modalSectionForm.append(ajoutForm)
     modalElement.append(titreGalerie, modalSectionForm)
 
-    // Recuperation de l'image 
+    // Recuperation et  affichage de l'image  dans le formulaire ajout 
     image.addEventListener("change", function (event) {
         icoImage.setAttribute("class", "element-cacher")
         conditionImage.setAttribute("class", "element-cacher")
@@ -264,16 +265,14 @@ function formAjouterWorks() {
     })
 }
 
-
-
+// Recuperation des elements  Works via l'Api
 const urlApiCategorie = "http://localhost:5678/api/categories"
 const urlApiWorks = "http://localhost:5678/api/works"
 const urlApiLogin = "http://localhost:5678/api/users/login"
 
 
+// function affichage des elements Works
 function galerieAfficherPhotos() {
-    // Recuperation des elements  Works via l'Api
-
     fetch(urlApiWorks)
         .then(function (response) {
             if (response.ok) {
@@ -303,9 +302,14 @@ function galerieAfficherPhotos() {
                         btnCategorie.addEventListener("click", function (event) {
                             btnTous.setAttribute("class", "button")
                             galerie.innerHTML = "";
-                            // Filtrage des works par categories
+                            // Affichage  des elements  par categories
                             const worksByCategorie = works.filter((works) => {
+
+                                titreProjet.innerHTML = categorie.name
+
+
                                 return works.category.id == categorie.id
+
                             });
 
                             afficherElements(worksByCategorie)
@@ -314,9 +318,12 @@ function galerieAfficherPhotos() {
                 })
 
 
-            //Affichage de tous les works avec le button "Tous"
+            //Affichage de tous les elements en clickant sur le button "Tous"
             btnTous.setAttribute("class", "btn-categorie-active")
             btnTous.addEventListener("click", function () {
+
+                titreProjet.innerHTML = "Mes Projets"
+
 
                 btnTous.setAttribute("class", "btn-categorie-active")
                 galerie.innerHTML = "";
@@ -473,7 +480,6 @@ function afficherModeEdition() {
              imgChange.remove()
              image.value = "";
          })
- 
   */
     });
 }
