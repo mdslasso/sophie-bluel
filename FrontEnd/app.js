@@ -201,7 +201,7 @@ function modalElements() {
     modalEntete.append(close)
     image.value = "";
     imgChange.remove()
-    console.log(image.value)
+    location.reload()
 }
 
 
@@ -301,9 +301,7 @@ function galerieAfficherPhotos() {
                         divBnt.append(btnCategorie)
 
                         btnCategorie.addEventListener("click", function (event) {
-
-                            event.currentTarget.setAttribute("class", "btn-categorie-active")
-
+                            btnTous.setAttribute("class", "button")
                             galerie.innerHTML = "";
                             // Filtrage des works par categories
                             const worksByCategorie = works.filter((works) => {
@@ -317,9 +315,10 @@ function galerieAfficherPhotos() {
 
 
             //Affichage de tous les works avec le button "Tous"
-
+            btnTous.setAttribute("class", "btn-categorie-active")
             btnTous.addEventListener("click", function () {
 
+                btnTous.setAttribute("class", "btn-categorie-active")
                 galerie.innerHTML = "";
                 afficherElements(works)
             });
@@ -463,16 +462,19 @@ function afficherModeEdition() {
             }
         })
 
-        retour.addEventListener("click", function () {
-            titreGalerie.innerText = "Galerie photo"
-            modal.style.display = "block"
-            modalElement.innerHTML = ""
-            modalEntete.innerHTML = ""
-            modalEntete.append(close)
-            modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
-            imgChange.remove()
-            image.value = "";
-        })
+
+        /*  retour.addEventListener("click", function () {
+             titreGalerie.innerText = "Galerie photo"
+             modal.style.display = "block"
+             modalElement.innerHTML = ""
+             modalEntete.innerHTML = ""
+             modalEntete.append(close)
+             modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
+             imgChange.remove()
+             image.value = "";
+         })
+ 
+  */
     });
 }
 
