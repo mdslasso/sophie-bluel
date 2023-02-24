@@ -482,7 +482,7 @@ function afficherModeEdition() {
         window.addEventListener("click", function (event) {
             if (event.target == modal) {
                 modalElements()
-                location.reload()
+
             }
         })
 
