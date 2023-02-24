@@ -65,12 +65,13 @@ const retour = createElement("span")
 const titreGalerie = createElement("h3")
 const modalSectionPhoto = createElement("div")
 const hr = createElement("hr")
+const ajoutForm = createElement("form")
 const btnAjouter = createElement("button")
 const btnSupprimer = createElement("span")
 const modalSectionForm = createElement("section")
-const ajoutForm = createElement("form")
 const submitValider = createElement("input")
-let image = createElement("input")
+
+const image = createElement("input")
 const title = createElement("input")
 const icoImage = createElement("i")
 const conditionImage = createElement("p")
@@ -103,6 +104,8 @@ modalEntete.setAttribute("id", "modal-entete")
 modalSectionPhoto.setAttribute("id", "modal-section-photo")
 modalSectionForm.setAttribute("id", "section-form")
 modal.setAttribute("hr", "#")
+ajoutForm.setAttribute("id", "ajout-form")
+
 
 // Creations des button pour la gestion des filtres par categorie
 const divBnt = createElement("div")
@@ -202,12 +205,13 @@ function modalElements() {
     modalEntete.append(close)
     image.value = "";
     imgChange.remove()
-    location.reload()
+    //location.reload()
 }
 
 
 // function ajout works
 function formAjouterWorks() {
+
     imgChange.remove()
     image.setAttribute("id", "input-image-work")
     titreGalerie.innerText = "Ajout photo"
@@ -219,7 +223,6 @@ function formAjouterWorks() {
     labelCategory.innerText = "Catégorie"
     conditionImage.innerText = "jpg, png : 4mo max"
     submitValider.innerHTML = ""
-    ajoutForm.setAttribute("id", "ajout-form")
     selectCategory.setAttribute("name", "category")
     icoImage.setAttribute("class", "fa-sharp fa-solid fa-image")
     cadreImageAjout.setAttribute("id", "cadre-image-ajout")
@@ -448,11 +451,12 @@ function afficherModeEdition() {
             })
 
         // Ajout d'un nouveau work
-        btnAjouter.addEventListener("click", function () {
+        btnAjouter.addEventListener("click", function (event) {
             formAjouterWorks()
+
             // Envoie du nouveau work dans la base de donnee
             ajoutForm.addEventListener("submit", function (event) {
-                event.preventDefault();
+                event.preventDefault()
                 const form = event.currentTarget
                 const data = new FormData(form)
 
@@ -478,21 +482,22 @@ function afficherModeEdition() {
         window.addEventListener("click", function (event) {
             if (event.target == modal) {
                 modalElements()
+                location.reload()
             }
         })
 
 
-        /*  retour.addEventListener("click", function () {
-             titreGalerie.innerText = "Galerie photo"
-             modal.style.display = "block"
-             modalElement.innerHTML = ""
-             modalEntete.innerHTML = ""
-             modalEntete.append(close)
-             modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
-             imgChange.remove()
-             image.value = "";
-         })
-  */
+        retour.addEventListener("click", function () {
+            titreGalerie.innerText = "Galerie photo"
+            modal.style.display = "block"
+            modalElement.innerHTML = ""
+            modalEntete.innerHTML = ""
+            modalEntete.append(close)
+            modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
+            imgChange.remove()
+
+        })
+
     });
 }
 
