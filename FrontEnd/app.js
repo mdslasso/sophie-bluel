@@ -486,17 +486,17 @@ function afficherModeEdition() {
             }
         })
 
-
-        retour.addEventListener("click", function () {
-            titreGalerie.innerText = "Galerie photo"
-            modal.style.display = "block"
-            modalElement.innerHTML = ""
-            modalEntete.innerHTML = ""
-            modalEntete.append(close)
-            modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
-            imgChange.remove()
-
-        })
+        /* 
+                retour.addEventListener("click", function () {
+                    titreGalerie.innerText = "Galerie photo"
+                    modal.style.display = "block"
+                    modalElement.innerHTML = ""
+                    modalEntete.innerHTML = ""
+                    modalEntete.append(close)
+                    modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
+                    imgChange.remove()
+        
+                }) */
 
     });
 }
