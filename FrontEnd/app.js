@@ -15,6 +15,8 @@ function setAttributes(element, attrs) {
     }
 }
 
+// Stockage du token au localStorage
+let userToken = localStorage.getItem("userToken")
 
 // Creation des elements du dom
 const body = selectElement("body")
@@ -62,6 +64,7 @@ const modalContent = createElement("div")
 const modalElement = createElement("div")
 const close = createElement("span")
 const retour = createElement("span")
+const cursor = createElement("i")
 const titreGalerie = createElement("h3")
 const modalSectionPhoto = createElement("div")
 const hr = createElement("hr")
@@ -105,6 +108,11 @@ modalSectionPhoto.setAttribute("id", "modal-section-photo")
 modalSectionForm.setAttribute("id", "section-form")
 modal.setAttribute("hr", "#")
 ajoutForm.setAttribute("id", "ajout-form")
+cursor.setAttribute("id", "cursor")
+
+close.innerHTML = "&times;"
+retour.innerHTML = "&leftarrow;"
+cursor.innerHTML = "&#x02720;"
 
 
 // Creations des button pour la gestion des filtres par categorie
@@ -179,10 +187,24 @@ function afficherAdmin() {
 }
 
 
+
+// function elements modal ( action click close, body )
+function closeModale() {
+    modal.style.display = "none"
+    modalEntete.innerHTML = ""
+    modalEntete.append(close)
+    image.value = "";
+    imgChange.remove()
+    modalSectionForm.innerHTML = ""
+    ajoutForm.remove()
+    modalSectionForm.remove()
+    selectCategory.innerHTML = ""
+    //location.reload()
+}
+
+
 // function pour afficher les elements de la modale
 function afficherModale() {
-    close.innerHTML = "&times;"
-    retour.innerHTML = "&leftarrow;"
     btnAjouter.innerText = "Ajouter une photo"
     btnSupprimer.innerText = "Supprimer la galerie"
     modal.style.display = "block"
@@ -193,25 +215,88 @@ function afficherModale() {
     titreGalerie.innerText = "Galerie photo"
     modal.appendChild(modalContent)
     modalEntete.appendChild(close)
+    modalSectionPhoto.append(cursor)
     modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
     modalContent.append(modalEntete, modalElement)
-}
+
+    fetch(urlApiWorks)
+
+        .then(function (response) {
+            if (response.ok) {
+
+                return response.json();
+            }
+        }).then(function (works) {
+
+            for (let work of works) {
+                const article = createElement("article")
+                const cadreImage = createElement("div")
+                const editWork = createElement("span")
+                const deleteWork = createElement("i")
+                const img = new Image()
+                editWork.innerText = "édit"
+                img.src = work.imageUrl
+                img.crossOrigin = "Anonymous";
+                deleteWork.setAttribute("class", "fa-solid fa-trash-can")
+                cadreImage.setAttribute("id", "cadre-image")
+                cadreImage.append(img, deleteWork)
+                article.append(cadreImage, editWork)
+                modalSectionPhoto.append(article)
+
+                // Suppression work 
+                deleteWork.addEventListener("click", function (event) {
+                    event.preventDefault()
+                    let optionsDelete = {
+                        method: "DELETE",
+                        headers: {
+                            "Content-type": "application/json; charsert=UTF-8",
+                            "Authorization": `Basic ${userToken}`
+                        }
+                    }
+
+                    fetch(`http://localhost:5678/api/works/${work.id}`, optionsDelete)
+
+                        .then(response => response.json())
 
 
-// function elements modal ( action click close, body )
-function modalElements() {
-    modal.style.display = "none"
-    modalEntete.innerHTML = ""
-    modalEntete.append(close)
-    image.value = "";
-    imgChange.remove()
-    //location.reload()
+                })
+            }
+        })
+
+
+    // Gestion de la  modal
+    close.addEventListener("click", function () {
+        closeModale()
+    })
+
+    window.addEventListener("click", function (event) {
+        if (event.target == modal) {
+            closeModale()
+        }
+    })
+    retour.addEventListener("click", function () {
+        titreGalerie.innerText = "Galerie photo"
+        modal.style.display = "block"
+        modalElement.innerHTML = ""
+        modalEntete.innerHTML = ""
+        modalEntete.append(close)
+        modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
+        imgChange.remove()
+        selectCategory.innerHTML = ""
+        modalSectionForm.innerHTML = ""
+        ajoutForm.reset()
+        ajoutForm.remove()
+        modalSectionForm.remove()
+
+
+    })
+
 }
+
 
 
 // function ajout works
 function formAjouterWorks() {
-
     imgChange.remove()
     image.setAttribute("id", "input-image-work")
     titreGalerie.innerText = "Ajout photo"
@@ -226,8 +311,6 @@ function formAjouterWorks() {
     selectCategory.setAttribute("name", "category")
     icoImage.setAttribute("class", "fa-sharp fa-solid fa-image")
     cadreImageAjout.setAttribute("id", "cadre-image-ajout")
-    ajoutForm.innerHTML = ""
-
     fetch(urlApiCategorie)
         .then(function (response) {
             if (response.ok) {
@@ -243,9 +326,10 @@ function formAjouterWorks() {
                 selectCategory.append(optionCategory)
             }
 
-            ajoutForm.append(cadreImageAjout, labelTitle, title, labelCategory, selectCategory, hr, submitValider)
+
         });
 
+    ajoutForm.append(cadreImageAjout, labelTitle, title, labelCategory, selectCategory, hr, submitValider)
 
     btnUpload.innerText = " + Ajouter photo"
     conditionImage.setAttribute("class", "element-montrer")
@@ -308,9 +392,6 @@ function galerieAfficherPhotos() {
                             // Affichage  des elements  par categories
                             const worksByCategorie = works.filter((works) => {
 
-                                titreProjet.innerHTML = categorie.name
-
-
                                 return works.category.id == categorie.id
 
                             });
@@ -325,21 +406,6 @@ function galerieAfficherPhotos() {
             btnTous.setAttribute("class", "btn-categorie-active")
             btnTous.addEventListener("click", function () {
 
-                if (localStorage.getItem("userToken")) {
-
-                    titreProjet.innerHTML = `Mes Projets  <div id= "edit-mode" > <i class="fa-solid fa-pen-to-square"></i>modifier<div>`;
-
-
-
-                    icoEdit
-
-
-                } else {
-
-                    titreProjet.innerHTML = "Mes Projets";
-                }
-
-
                 btnTous.setAttribute("class", "btn-categorie-active")
                 galerie.innerHTML = "";
                 afficherElements(works)
@@ -353,6 +419,8 @@ galerieAfficherPhotos()
 loginBtn.addEventListener("click", function () {
     afficherLogin()
 })
+
+
 
 // Connexion
 loginForm.addEventListener("submit", function (event) {
@@ -381,130 +449,72 @@ loginForm.addEventListener("submit", function (event) {
         .then(user => {
 
             loginText.innerText = ""
-
             if (user.userId || user.token) {
-
 
                 localStorage.setItem("userToken", user.token);
                 window.location.href = "index.html"
+
 
             } else {
 
                 loginText.innerText = "Email ou Mot de passe incorrect"
                 loginText.setAttribute("class", "incorrect")
-
             }
 
         })
 });
 
 
+
+
 // function afficher mode edition
 function afficherModeEdition() {
     modeEdition.addEventListener("click", function () {
-
-        let userToken = localStorage.getItem("userToken")
-
         afficherModale()
-
-        fetch(urlApiWorks)
-
-            .then(function (response) {
-                if (response.ok) {
-
-                    return response.json();
-                }
-            }).then(function (works) {
-
-                for (let work of works) {
-
-                    const article = createElement("article")
-                    const cadreImage = createElement("div")
-                    const editWork = createElement("span")
-                    const deleteWork = createElement("i")
-                    const img = new Image()
-                    editWork.innerText = "édit"
-                    img.src = work.imageUrl
-                    img.crossOrigin = "Anonymous";
-                    deleteWork.setAttribute("class", "fa-solid fa-trash-can")
-                    cadreImage.setAttribute("id", "cadre-image")
-                    cadreImage.append(img, deleteWork)
-                    article.append(cadreImage, editWork)
-                    modalSectionPhoto.append(article)
-
-                    // Suppression work 
-                    deleteWork.addEventListener("click", function (event) {
-                        event.preventDefault()
-                        let optionsDelete = {
-                            method: "DELETE",
-                            headers: {
-                                "Content-type": "application/json; charsert=UTF-8",
-                                "Authorization": `Basic ${userToken}`
-                            }
-                        }
-
-                        fetch(`http://localhost:5678/api/works/${work.id}`, optionsDelete)
-
-                            .then(response => response.json())
-                    })
-                }
-            })
-
-        // Ajout d'un nouveau work
-        btnAjouter.addEventListener("click", function (event) {
-            formAjouterWorks()
-
-            // Envoie du nouveau work dans la base de donnee
-            ajoutForm.addEventListener("submit", function (event) {
-                event.preventDefault()
-                const form = event.currentTarget
-                const data = new FormData(form)
-
-                let optionsAddWorks = {
-                    method: 'POST',
-                    headers: {
-                        // "Content-Type": "application/json",
-                        "Authorization": `Bearer ${userToken}`,
-                    },
-
-                    body: data
-                }
-                fetch(urlApiWorks, optionsAddWorks)
-                    .then(response => response.json())
-            })
-        })
-
-        // Gestion de la  modal
-        close.addEventListener("click", function () {
-            modalElements()
-        })
-
-        window.addEventListener("click", function (event) {
-            if (event.target == modal) {
-                modalElements()
-
-            }
-        })
-
-        /* 
-                retour.addEventListener("click", function () {
-                    titreGalerie.innerText = "Galerie photo"
-                    modal.style.display = "block"
-                    modalElement.innerHTML = ""
-                    modalEntete.innerHTML = ""
-                    modalEntete.append(close)
-                    modalElement.append(titreGalerie, modalSectionPhoto, hr, btnAjouter, btnSupprimer)
-                    imgChange.remove()
-        
-                }) */
-
     });
 }
+
+// modification work
+cadreEdit3.addEventListener("click", function () {
+    afficherModale()
+})
+
+
+// Ajout d'un nouveau work
+btnAjouter.addEventListener("click", function () {
+
+    ajoutForm.reset()
+    formAjouterWorks()
+
+
+    // Envoie du nouveau work dans la base de donnee
+    ajoutForm.addEventListener("submit", function (event) {
+        event.preventDefault()
+
+        const form = event.currentTarget
+        const data = new FormData(form)
+
+        let optionsAddWorks = {
+            method: 'POST',
+            headers: {
+                // "Content-Type": "application/json",
+                "Authorization": `Bearer ${userToken}`,
+            },
+            body: data
+        }
+        fetch(urlApiWorks, optionsAddWorks)
+            .then(response => response.json())
+    })
+})
+
+
+
 
 // Affichage de la banierre Admin 
 if (localStorage.getItem("userToken")) {
     afficherAdmin()
     afficherModeEdition()
+
 
     // Deconnexion
     loginBtn.innerHTML = "Logout"
@@ -514,6 +524,7 @@ if (localStorage.getItem("userToken")) {
     })
 
 }
+
 
 
 

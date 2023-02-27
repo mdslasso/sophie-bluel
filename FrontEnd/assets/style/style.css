@@ -540,6 +540,7 @@ button {
 	left: -5px;
 	z-index: 1;
 	position: relative;
+	border-radius: 2px;
 
 
 }
@@ -832,6 +833,22 @@ input[type="file"] {
 	display: inline-block;
 	position: absolute;
 	margin-top: 7px;
+
+
+}
+
+#cursor {
+
+	position: absolute;
+	color: white;
+	margin-left: 38px;
+	margin-top: 22px;
+	background-color: black;
+	z-index: 1;
+	padding-left: 2px;
+	padding-right: 2px;
+	font-size: 18px;
+	border-radius: 2px;
 
 
 }
